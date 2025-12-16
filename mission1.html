@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mission 1 - Rapport SAE S1.04 / R1.02</title>
+
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body>
+
+<header>
+    <input type="checkbox" id="toggle">
+    <label for="toggle" class="burger-label">☰</label>
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="mission1.html">Mission 1</a></li>
+            <li><a href="mission2.html">Mission 2</a></li>
+            <li><a href="mission3.html">Mission 3</a></li>
+            <li><a href="conclusion.html">Conclusion</a></li>
+            <li><a href="conception-web.html">La Conception Web</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+
+    <section>
+        <h1>Mission 1 : Analyse des données KDou avec Excel</h1>
+    </section>
+
+    <section>
+        <h2>Le Contexte</h2>
+        <p>
+            Pour cette première mission, nous avons réalisé un audit des données
+            fournies par l'entreprise KDou à l'aide d'Excel.
+            L'objectif était d'analyser l'offre de produits et la
+            clientèle pour préparer la future base de données.
+        </p>
+    </section>
+
+    <section>
+            <h2>Bilan structuré sur l'étude des données</h2>
+            <table>
+                <caption><strong>Schéma Relationnel de la Base de Données</strong></caption>
+                <thead>
+                <tr>
+                    <th>Table</th>
+                    <th><em>Clés primaire</em> / candidates</th>
+                    <th>Clés étrangère</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <td>Fournisseur</td>
+                    <td><em>N° fournisseur</em>, Société, Contact</td>
+                    <td>Aucune</td>
+                </tr>
+                <tr>
+                    <td>Produit</td>
+                    <td><em>Réf produit</em></td>
+                    <td>Code catégorie → Categorie<br>N° fournisseur → Fournisseur</td>
+                </tr>
+                <tr>
+                    <td>Categorie</td>
+                    <td><em>Code catégorie</em>, Nom de catégorie</td>
+                    <td>Aucune</td>
+                </tr>
+                <tr>
+                    <td>Clientele</td>
+                    <td><em>Code client</em>, Société, Contact</td>
+                    <td>Aucune</td>
+                </tr>
+                <tr>
+                    <td>Commande</td>
+                    <td><em>N° commande</em></td>
+                    <td>Code client → Clientele</td>
+                </tr>
+                <tr>
+                    <td>DetailCommande</td>
+                    <td><em>Clé composée</em> (N° commande, Réf produit)</td>
+                    <td>N° commande → Commande<br>Réf produit → Produit</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <p>
+                Ce tableau est le plan de la base de données, montrant comment les informations sont rangées dans des
+                "tiroirs" séparés appelés tables.
+
+                <br>Les tables principales comme "Clientele" ou "Produit" contiennent les listes d'informations (noms
+                des clients, prix des produits).
+
+                <br>Chaque information de ces listes a un identifiant unique, sa "clé primaire".
+
+                <br>D'autres tables, comme "Commande", ne stockent pas les noms, mais utilisent ces identifiants
+                (appelés "clés étrangères") pour créer des liens.
+
+                <br>Par exemple, la table "Commande" relie un numéro de commande à un identifiant de client, connectant
+                l'ordre à la personne.
+
+                <br>La table "DetailCommande" est spéciale, car elle relie deux identifiants (celui de la commande et
+                celui du produit) pour dire "ce produit était dans cette commande".
+
+                <br>Ce système évite de répéter l'information et la garde organisée : si un client déménage, on ne
+                change son adresse qu'à un seul endroit.
+            </p>
+            <br>
+            <h3>Exemple indicateur : Combien y a-t-il de clients en Île-de-France ?</h3>
+
+            <h4>Interpretation</h4>
+            <p>
+                L'objectif de cette requette est de compter le nombre de clients qui reside en Île-de-France.
+            </p>
+            <ul>
+                <li>Pour compter les clients de l’Île-de-France, on utilise la colonne Code postal de la table
+                    Clientèle
+                </li>
+                <li>Les départements d’Île-de-France commencent par 75, 77, 78, 91, 92, 93, 94 ou 95.</li>
+            </ul>
+            <br>
+            <h4>Résultat</h4>
+            <p>
+                Le nombre de clients en Île-de-France est de 6.
+                <img src="images/mission1-énoncé.png" alt="Résultat du nombre de clients en Île-de-France">
+            </p>
+            <br>
+            <h4>Formule utilisée dans Excel</h4>
+            <pre>
+                <code>
+=NB.SI(F:F;"75*")+NB.SI(F:F;"77*")+NB.SI(F:F;"78*")+NB.SI(F:F;"91*")+NB.SI(F:F;"92*")+NB.SI(F:F;"93*")+NB.SI(F:F;"94*")+NB.SI(F:F;"95*"
+                </code>
+            </pre>
+
+        <article>
+            <h2>Anomalies et incohérences</h2>
+            <p>
+                Nous avons relevé plusieurs incohérences et données manquantes :
+            </p>
+            <ul>
+                <li><strong>Doublons dans la table Fournisseur :</strong> la colonne N° fournisseur contient des valeurs
+                    répétées alors qu’elle doit être unique (clé primaire).
+                </li>
+                <li><strong>Références manquantes :</strong>
+                    <br>- Certains clients apparaissent dans la table Commande, mais n’existent pas dans la table
+                    Clientele (exemple : code client FOLK0).
+                    <br>- Certains produits font référence à des catégories inexistantes (par ex. Code catégorie = 9
+                    dans la table Produit alors que la table Categorie n’a que des codes 1 à 8).
+                </li>
+                <li><strong>Maria Larson :</strong> le client Maria Larson n’existe pas dans la table Clientele, donc on
+                    ne peut pas retrouver ses commandes de novembre 2021 → incohérence avec l’énoncé.
+                </li>
+                <li><strong>Marc Randon :</strong> ce client existe bien dans la table Clientele, mais il est signalé
+                    comme ayant eu plusieurs problèmes de communication avec KDou. Cela met en évidence un problème de
+                    qualité relation client, mais pas une incohérence de données.
+                </li>
+                <li><strong>Noms de pays non uniformisés Et adresse mail non validé :</strong> certains pays sont écrits
+                    de plusieurs façons (ex. Pays-Bas et Pays Bas, U.S.A. et Etats-Unis) → risque de fausser les
+                    comptages. Certaine adresse mail ne correspondent pas à la norme par exemple @orange.fr devient
+                    orenge.fr ou bien l’adresse pierre@chezpierre.fr
+                </li>
+                <li><strong>Noms de villes incohérents :</strong> des variations dans l’orthographe des villes (ex.
+                    Besancon au lieu de Besançon) peuvent poser des problèmes pour les filtres et regroupements.
+                </li>
+            </ul>
+        </article>
+
+    </section>
+
+    <article>
+        <h2>Perspective d'amélioration</h2>
+        <ul>
+            <li>Mettre en place des contraintes d'intégrité référentielle (clé étrangère obligatoire)</li>
+            <li>Supprimer les doublons dans les clés primaires (ex : Fournisseur)</li>
+            <li>Corriger les codes clients et catégories inexistants dans les tables liées</li>
+            <li>Normaliser les noms de villes (ex : Besancon vs Besançon) pour éviter les incohérences</li>
+            <li>Ou bien changé de logiciel pour passer sur access par exemple qui est mieux pour gérer les données
+                permettra une meilleure lecture et compréhension des données
+            </li>
+        </ul>
+    </article>
+    <article>
+        <h2>Conclusion</h2>
+        <p>
+            L'analyse de la base de données KDou, réalisée à travers l'exploration des données et l'application de
+            méthodologies sous Excel, a permis de répondre avec succès à diverses questions métier. Des informations
+            spécifiques ont été extraites, telles que le décompte de clients par zone géographique, l'identification de
+            produits par fournisseur , ou le suivi des commandes par client.
+            Cependant, cette étude approfondie a surtout révélé des anomalies et des incohérences significatives qui
+            compromettent la fiabilité des données.
+           <br>Les problèmes majeurs identifiés sont :
+        </p>
+        <ul>
+            <li>Des doublons dans les clés primaires, notamment dans la table Fournisseur.</li>
+            <li>Des ruptures de l'intégrité référentielle, avec des commandes liées à des clients ou des produits liés à
+                des catégories inexistants.</li>
+            <li>Un manque d'uniformisation des données textuelles (ex : noms de pays ou de villes) et des formats
+                invalides (ex : adresses e-mail), ce qui fausse les filtres et les analyses.</li>
+        </ul>
+        <p>
+            Pour assurer la pérennité et la fiabilité de la base de données, des actions d'amélioration sont
+            indispensables. Celles-ci incluent le nettoyage des données (suppression des doublons , correction des
+            références , normalisation des noms) et le renforcement des règles de gestion par la mise en place de
+            contraintes d'intégrité. L'utilisation d'un outil plus robuste comme Access est également suggérée pour une
+            meilleure gestion des données.
+        </p>
+    </article>
+
+</main>
+
+<footer>
+    <p>SAE S1.04 & R1.02 - BUT Informatique - IUT de Paris - Rives de Seine</p>
+    <p>Année 2025-2026</p>
+</footer>
+
+</body>
+</html>

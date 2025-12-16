@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mission 2 - Rapport SAE S1.04 / R1.02</title>
+
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body>
+
+<header>
+    <input type="checkbox" id="toggle">
+    <label for="toggle" class="burger-label">☰</label>
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="mission1.html">Mission 1</a></li>
+            <li><a href="mission2.html">Mission 2</a></li>
+            <li><a href="mission3.html">Mission 3</a></li>
+            <li><a href="conclusion.html">Conclusion</a></li>
+            <li><a href="conception-web.html">La Conception Web</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+
+    <section>
+        <h1>Mission 2 : Exploitation <abbr title="Bases De Données">BDD</abbr> avec interface Low Code</h1>
+    </section>
+
+    <section>
+        <h2>Le Contexte</h2>
+        <p>
+            Pour cette mission, nous avons utilisé l'interface low-code
+            Microsoft Access pour interroger la base de données KDou
+            via l'assistant de requêtes (<abbr title="Query By Example">QBE</abbr>) et directement en <abbr title="Structured Query Language">SQL</abbr>.
+        </p>
+    </section>
+
+    <section>
+        <h2>Présentation des indicateurs</h2>
+
+        <article>
+            <h3>Indicateur 1 : Quels sont les produits (fournisseur et pays de provenance) de catégorie viandes ou
+                poissons ayant un coût d’achat de plus de 50€ ?</h3>
+
+            <h4>Interprétation</h4>
+            <p>
+                L'objectif est d'extraire une liste de produits très chers (CoutAchat > 50€) appartenant exclusivement
+                aux catégories "Viandes" OU "Produit de la mer".
+                <br>Pour chaque produit correspondant, nous devons afficher une fiche détaillée :
+            </p>
+            <ul>
+                <li>Le nom du produit</li>
+
+                <li>Son prix d'achat (pour vérification)</li>
+
+                <li>Le nom du fournisseur</li>
+
+                <li>La ville du fournisseur</li>
+
+                <li>Le pays du fournisseur</li>
+            </ul>
+            <p>
+                Cela nécessite de joindre les tables Produit, Categorie, et Fournisseur et d'appliquer un filtre combiné
+                (sur le prix ET sur les deux catégories).
+            </p>
+            <br>
+            <h4>Résultat</h4>
+            <img src="images/mission2-énoncé1.png" alt="liste de produits très chers (CoutAchat > 50€)
+                                                        appartenant exclusivement aux catégories Viandes OU Produit de la mer">
+            <h4>Code <abbr title="Structured Query Language">SQL</abbr></h4>
+            <pre>
+                <code>
+SELECT Produit.NomProd, Produit.CoutAchat, Fournisseur.Societe, Fournisseur.Ville, Fournisseur.Pays
+FROM Categorie INNER JOIN (Fournisseur INNER JOIN Produit ON Fournisseur.NoFour = Produit.NoFour) ON Categorie.CodeCateg = Produit.CodeCateg
+WHERE (NomCateg="Viandes" OR NomCateg="Poissons et fruits de mer") AND CoutAchat>50;
+                </code>
+            </pre>
+        </article>
+
+        <article>
+            <h3>Indicateur 2 : Quel sont les CINQ dernières commandes du client Max Deschamps ?</h3>
+
+            <h4>Interprétation</h4>
+            <p>
+                L'objectif est de retrouver la liste des CINQ commandes les plus récentes passées par un client
+                spécifique, "Max Deschamps".
+                Pour cela, il faut :
+            </p>
+            <ul>
+                <li>Joindre les tables Clientele et Commande (sur CodeCli).</li>
+
+                <li>Filtrer les résultats pour ne garder que le contact "Max Deschamps".</li>
+
+                <li>Trier les commandes trouvées par date (AlivAv), de la plus récente à la plus ancienne (en utilisant
+                    ORDER BY AlivAv DESC).
+                </li>
+
+                <li>Limiter le résultat final aux CINQ premières lignes (TOP 5 en Access <abbr title="Structured Query Language">SQL</abbr>) pour n'afficher que les
+                    CINQ dernières.
+                </li>
+            </ul>
+            <br>
+            <h4>Résultat</h4>
+            <img src="images/mission2-énoncé2.png" alt="liste des CINQ commandes les plus récentes passées par Max Deschamps">
+            <h4>Code <abbr title="Structured Query Language">SQL</abbr></h4>
+            <pre>
+                <code>
+SELECT TOP 5 Commande.*
+FROM Clientele INNER JOIN Commande ON Clientele.CodeCli = Commande.CodeCli
+WHERE Contact="Max Deschamps"
+ORDER BY AlivAv DESC;
+                </code>
+            </pre>
+        </article>
+
+        <article>
+            <h3>Indicateur 3 : Quels fournisseurs hors France n’ont pas encore de produits au catalogue de Kdou ?</h3>
+
+            <h4>Interprétation</h4>
+            <p>
+                L'objectif est d'identifier des fournisseurs "inactifs" qui sont basés à l'étranger.
+                <br>Pour cela, il faut :
+            </p>
+            <ul>
+                <li>Regarder la table Fournisseur pour trouver tous ceux dont le Pays n'est pas "France" (Pays <>
+                    'France').
+                </li>
+
+                <li>Prendre cette liste de fournisseurs étrangers et la comparer à la table Produit.</li>
+
+                <li>Utiliser une jointure externe (LEFT JOIN) pour lier les Fournisseur aux Produit.</li>
+
+                <li>Ne garder que les fournisseurs pour lesquels il n'existe aucun produit correspondant (ceux où la
+                    référence du produit est Null).
+                </li>
+            </ul>
+            <br>
+            <h4>Résultat</h4>
+            <img src="images/mission2-énoncé3.png" alt="Screen des fournisseurs inactifs qui sont basés à l'étranger">
+
+            <h4>Code <abbr title="Structured Query Language">SQL</abbr></h4>
+            <pre>
+                <code>
+SELECT Fournisseur.NoFour, Fournisseur.Societe
+FROM Fournisseur LEFT JOIN Produit ON Fournisseur.NoFour = Produit.NoFour
+WHERE Produit.NoFour Is Null AND Pays<>"France";
+                </code>
+            </pre>
+        </article>
+
+        <article>
+            <h3>Indicateur 4 : Quels fournisseurs proposent de la viande et du poisson ?</h3>
+
+            <h4>Interprétation</h4>
+            <p>
+                L'objectif est de trouver les fournisseurs qui ont dans leur catalogue à la fois des produits de la
+                catégorie "Viandes" ET des produits de la catégorie "Produit de la mer" (poissons).
+                <br>Ce n'est pas une simple recherche "OU" nous devons :
+            </p>
+            <ul>
+                <li>Identifier tous les fournisseurs qui vendent de la "Viande".</li>
+
+                <li>Identifier tous les fournisseurs qui vendent du "Produit de la mer".</li>
+
+                <li>Trouver les noms qui apparaissent dans les two listes en même temps (c'est l'intersection des deux
+                    groupes).
+                </li>
+            </ul>
+            <br>
+            <h4>Résultat</h4>
+            <img src="images/mission2-énoncé4.png" alt="fournisseurs proposent de la viande et du poisson ">
+
+            <h4>Code <abbr title="Structured Query Language">SQL</abbr></h4>
+            <pre>
+                <code>
+SELECT DISTINCT F.*
+FROM (Fournisseur AS F INNER JOIN Produit AS P1 ON F.NoFour = P1.NoFour) INNER JOIN Categorie AS C1 ON P1.CodeCateg = C1.CodeCateg, (Fournisseur AS F2 INNER JOIN Produit AS P2 ON F2.NoFour = P2.NoFour) INNER JOIN Categorie AS C2 ON P2.CodeCateg = C2.CodeCateg
+WHERE F.NoFour = F2.NoFour AND C1.NomCateg LIKE "*Viande*" AND C2.NomCateg LIKE "*Poisson*"
+ORDER BY F.NoFour;
+                </code>
+            </pre>
+        </article>
+
+    </section>
+
+</main>
+
+<footer>
+    <p>SAE S1.04 & R1.02 - BUT Informatique - IUT de Paris - Rives de Seine</p>
+    <p>Année 2025-2026</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mission 3 - Rapport SAE S1.04 / R1.02</title>
+
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+
+<body>
+
+<header>
+    <input type="checkbox" id="toggle">
+    <label for="toggle" class="burger-label">☰</label>
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="mission1.html">Mission 1</a></li>
+            <li><a href="mission2.html">Mission 2</a></li>
+            <li><a href="mission3.html">Mission 3</a></li>
+            <li><a href="conclusion.html">Conclusion</a></li>
+            <li><a href="conception-web.html">La Conception Web</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+
+    <section>
+        <h1>Mission 3 : Analyse de la nouvelle <abbr title="Bases De Données">BDD</abbr> avec <abbr title="Structured Query Language">SQL</abbr></h1>
+    </section>
+
+    <section>
+        <h2>Le Contexte</h2>
+        <p>
+            Pour cette troisième mission, nous avons analysé la nouvelle version
+            de la base de données KDou en utilisant exclusivement le langage <abbr title="Structured Query Language">SQL</abbr>.
+            L'objectif était de répondre à de nouvelles problématiques en
+            écrivant nos propres requêtes complexes.
+        </p>
+    </section>
+
+    <section>
+        <h2>Présentation de nos indicateurs </h2>
+
+        <article>
+            <h3>Indicateur d'Ahmed Muhammad : Quels sont les produits dont le fournisseur est situé dans le même pays
+                que le client final ?</h3>
+
+            <h4>Objectif</h4>
+            <p>
+                Aider à réduire l'empreinte carbone en identifiant les ventes locales ainsi que d'économiser sur la logistique.
+            </p>
+            <br>
+
+            <h4>Intérêt de la requête :</h4>
+            <p>
+                Identifier les commandes avec lesquelles le produit n’a pas besoin de passer une frontière peut aider à
+                réduire l’empreinte carbone (moins de transport international),
+                à économiser sur la logistique et à renforcer les synergies locales.
+            </p>
+            <br>
+
+            <h4>Explication requête <abbr title="Structured Query Language">SQL</abbr>:</h4>
+            <p>
+                Cette requête recherche toutes les commandes avec lesquelles le client et le fournisseur sont dans le
+                même pays.
+            </p>
+            <ul>
+                <li>Les jointures relient les tables Clients, Commandes, Produits, Fournisseurs et le pays de chaque
+                    acteur.
+                </li>
+                <li>Le filtre WHERE pa1.PaysFR = pa2.PaysFR sélectionne seulement les cas où le fournisseur du produit
+                    et le client final partagent le même pays.
+                </li>
+                <li>Le résultat permet de repérer les ventes "locales" : ces transactions ont un impact écologique
+                    réduit puisque le produit n'a pas été transporté à l'international.
+                </li>
+            </ul>
+            <br>
+            <h4>Extrait des résultats</h4>
+            <img src="images/mission3-indicateur-Ahmed.png" alt="Screen des produits dont le fournisseur est situé dans le même pays que le client final">
+
+            <h4>Code <abbr title="Structured Query Language">SQL</abbr></h4>
+            <pre>
+                <code>
+SELECT c.[N° commande], cl.Societe AS Client, pa1.PaysFR AS Pays_Client, p.NomProd AS Produit, f.Societe AS Fournisseur, pa2.PaysFR AS Pays_Fournisseur
+FROM (((((Commande AS c
+INNER JOIN Clientele AS cl ON c.CodeCli = cl.CodeCli)
+INNER JOIN Pays AS pa1 ON cl.NoPays = pa1.NoPays)
+INNER JOIN DetailCommande AS dc ON c.[N° commande] = dc.[N° commande])
+INNER JOIN Produit AS p ON dc.[Réf produit] = p.RefProd)
+INNER JOIN Fournisseur AS f ON p.NoFour = f.NoFour)
+INNER JOIN Pays AS pa2 ON f.NoPays = pa2.NoPays
+WHERE pa1.PaysFR = pa2.PaysFR
+ORDER BY pa1.PaysFR, c.[N° commande];
+
+                </code>
+            </pre>
+        </article>
+
+        <article>
+            <h3>Indicateur d'Aditya Sittiniane : Quels ont été nos 5 produits 'best-sellers' (les plus vendus en
+                quantité) durant toute l'année 2021 ?</h3>
+
+            <h4>Objectif :</h4>
+            <p>
+                Analyser les performances de l'année 2021 pour identifier les produits "stars" de cette période.
+                Cela permet aux associés d'avoir un bilan des succès passés, qui peut être comparé aux ventes de l'année
+                en cours pour voir si les tendances sont stables.
+            </p>
+            <br>
+            <h4>Intérêt de la requête :</h4>
+            <p>
+                Cette analyse rétrospective est clé pour KDou. Elle permet de confirmer le succès des produits phares de
+                2021.
+                Les associés peuvent ainsi comparer ces "gagnants" avec les ventes actuelles (par exemple, 2022)
+                pour voir si la popularité de ces articles perdure ou si l'offre doit être renouvelée.
+            </p>
+            <br>
+            <h4>Explication requête <abbr title="Structured Query Language">SQL</abbr>:</h4>
+            <ul>
+                <li><strong>Jointure des tables (FROM...JOIN) :</strong> Elle connecte TROIS tables (Produit, DetailCommande, Commande)
+                    pour pouvoir lier le nom d'un produit (table Produit) à la quantité vendue (table DetailCommande) et
+                    à la date de la vente (table Commande).
+                </li>
+                <li><strong>Filtrage (WHERE) :</strong> La condition YEAR(C.DateCde) = 2021 est le filtre principal. Elle demande à
+                    Access de ne regarder que les lignes de commande dont l'année est 2021.
+                </li>
+                <li><strong>Regroupement (GROUP BY) :</strong> La requête regroupe toutes les lignes de vente par produit (RefProd et
+                    NomProd).
+                </li>
+                <li><strong>Calcul (SUM) :</strong> Pour chaque groupe (donc pour chaque produit), elle additionne (SUM) toutes les
+                    Quantités trouvées.
+                </li>
+                <li><strong>Tri et Limite (ORDER BY / TOP 5) :</strong> Enfin, elle trie le résultat total par la quantité calculée (de
+                    la plus haute à la plus basse, DESC) et ne conserve que les CINQ premières lignes (TOP 5).
+                </li>
+            </ul>
+            <br>
+            <h4>Résultat</h4>
+            <img src="images/mission3-indicateur-Aditya.png" alt="Screen des 5 best-sellers durant toute l'année 2021">
+
+            <h4>Code <abbr title="Structured Query Language">SQL</abbr></h4>
+            <pre>
+                <code>
+SELECT TOP 5 P.RefProd AS [Réf Produit], P.NomProd AS [Nom du Produit], SUM(DC.Quantité) AS [Quantité Totale Vendue]
+FROM (Produit AS P INNER JOIN DetailCommande AS DC ON P.RefProd = DC.[Réf produit])
+INNER JOIN Commande AS C ON DC.[N° commande] = C.[N° commande]
+WHERE YEAR(C.DateCde) = 2021
+GROUP BY P.RefProd, P.NomProd
+ORDER BY SUM(DC.Quantité) DESC;
+
+                </code>
+            </pre>
+        </article>
+
+        <article>
+            <h3>Indicateur d'Zakarya Ousahla : Analyse du chiffre d'affaires par catégorie de produits</h3>
+
+            <h4>Objectif :</h4>
+            <p>L’objectif est d’identifier quelles catégories de produits génèrent le + de chiffre d’affaires pour KDou.</p>
+            <br>
+
+            <h4>Intérêt de la requête :</h4>
+            <p>L’intérêt de cette requête est d’aider l’entreprise à orienter ses décisions commerciales et son offre,
+                KDou peut optimiser sa stratégie de vente, mieux repartir son budget marketing, ajuster son stock.
+            </p>
+            <br>
+
+            <h4>Explication requête <abbr title="Structured Query Language">SQL</abbr> :</h4>
+            <ul>
+                <li><strong>La jointure</strong> permet de relier TROIS tables, Catégorie pour obtenir le nom de catégorie, Produit pour savoir à quelle catégorie appartient chaque produit et DetaillCommande pour connaitre les quantités vendues de chaque produit.
+                    Cela permet de regrouper les ventes par catégorie de produits.</li>
+                <li><strong>Le GROUP BY</strong> regroupe toutes les lignes de commande par catégorie de produit.</li>
+                <li><strong>Le (SUM)</strong> additionne les montants trouvés du calcul du chiffre d’affaires.</li>
+                <li><strong>ORDER BY</strong> permet de trier les résultats du chiffre d’affaires le plus haut au plus bas.</li>
+            </ul>
+            <br>
+            <h4>Résultat</h4>
+            <img src="images/mission3-indicateur-Zakarya.png" alt="Screen des Analyse du chiffre d'affaires par catégorie de produits">
+
+            <h4>Code <abbr title="Structured Query Language">SQL</abbr></h4>
+            <pre>
+                <code>
+SELECT C.[NomCateg] AS Categorie,Sum(VAL(DC.[Quantité]) * VAL(P.[QteParUnit])) AS ChiffreAffaires
+FROM (DetailCommande AS DC INNER JOIN Produit AS P ON DC.[Réf produit] = P.RefProd) INNER JOIN Categorie AS C ON P.[CodeCateg] = C.[CodeCatg]
+GROUP BY C.[NomCateg]
+ORDER BY Sum(VAL(DC.[Quantité]) * VAL(P.[QteParUnit])) DESC;
+                </code>
+            </pre>
+        </article>
+
+        <article>
+            <h3>Indicateur d'Alan Khiari : Quels sont les 5 clients qui ont généré le plus de chiffre d’affaires en 2021 pour la société KDouc</h3>
+
+            <h4>Objectif :</h4>
+            <p>
+                L’objectif de cette requête est d’identifier les clients qui génèrent le plus de chiffre d’affaires afin de mieux cibler les actions de fidélisation,
+                optimiser la relation client et allouer efficacement les ressources commerciales.
+            </p>
+            <br>
+
+            <h4>Intérêt de la requête :</h4>
+            <p>
+                Cette analyse permet à KDouc d’identifier ses clients les plus importants en termes de chiffre d’affaires.
+                L’entreprise peut ainsi renforcer la relation avec ces clients stratégiques par des offres personnalisées ou des avantages exclusifs.
+                Elle permet aussi de surveiller l’évolution du portefeuille clients d’une année sur l’autre, d’anticiper d’éventuelles pertes majeures,
+                et de maximiser la rentabilité des opérations commerciales.
+            </p>
+            <br>
+
+            <h4>Explication requête <abbr title="Structured Query Language">SQL</abbr>:</h4>
+            <ul>
+                <li><strong>Jointure des tables (FROM…JOIN) :</strong> La requête relie quatre tables (Client, Commande, DetailCommande, Produit)
+                    pour lier chaque client à ses commandes, relier chaque commande à ses détails, puis obtenir le prix unitaire du produit vendu.</li>
+                <li><strong>Filtrage (WHERE) :</strong> On ne retient que les commandes passées durant l’année 2021.</li>
+                <li><strong>Regroupement (GROUP BY) :</strong> Les résultats sont regroupés par client pour récapituler le chiffre d’affaires généré par chacun.</li>
+                <li><strong>Calcul (SUM) :</strong> Le chiffre d’affaires par client s’obtient en multipliant la quantité vendue de chaque produit par son prix unitaire
+                    et en faisant la somme pour l’ensemble des commandes du client.</li>
+                <li><strong>Tri et Limite (ORDER BY / TOP 5) :</strong> Les résultats sont triés par chiffre d’affaires décroissant et seuls les cinq premiers clients sont affichés</li>
+            </ul>
+            <br>
+            <h4>Résultat</h4>
+            <img src="images/mission3-indicateur-Alan.png" alt="Screen des clients qui génèrent le plus de chiffre d’affaires">
+
+            <h4>Code <abbr title="Structured Query Language">SQL</abbr></h4>
+            <pre>
+                <code>
+SELECT TOP 5 Cl.CodeCli AS [Réf Client], Cl.Societe AS [Nom du Client], SUM(DC.Quantité * (P.CoutAchat * (1 + Ca.CoefMarge)) * (1 - DC.[Remise (%)]) ) AS [Chiffre d’Affaires]
+FROM ((((Clientele AS Cl INNER JOIN Commande AS C ON Cl.CodeCli = C.CodeCli)
+INNER JOIN DetailCommande AS DC ON C.[N° commande] = DC.[N° commande])
+INNER JOIN Produit AS P ON DC.[Réf produit] = P.RefProd)
+INNER JOIN Categorie AS Ca ON P.CodeCateg = Ca.CodeCateg)
+WHERE YEAR(C.DateCde) = 2021
+GROUP BY Cl.CodeCli, Cl.Societe
+ORDER BY SUM(DC.Quantité * (P.CoutAchat * (1 + Ca.CoefMarge)) * (1 - DC.[Remise (%)]) ) DESC;
+                </code>
+            </pre>
+        </article>
+
+    </section>
+
+</main>
+
+<footer>
+    <p>SAE S1.04 & R1.02 - BUT Informatique - IUT de Paris - Rives de Seine</p>
+    <p>Année 2025-2026</p>
+</footer>
+
+</body>
+</html>

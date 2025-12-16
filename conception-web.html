@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Conception Web - Rapport <abbr title="Situation d'Apprentissage et d'Évaluation">SAE</abbr> S1.04</title>
+    
+    <link rel="stylesheet" type="text/css"  href="css/style.css">
+</head>
+
+<body>
+
+<header>
+    <input type="checkbox" id="toggle">
+    <label for="toggle" class="burger-label">☰</label>
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="mission1.html">Mission 1</a></li>
+            <li><a href="mission2.html">Mission 2</a></li>
+            <li><a href="mission3.html">Mission 3</a></li>
+            <li><a href="conclusion.html">Conclusion</a></li>
+            <li><a href="conception-web.html">La Conception Web</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+
+    <section id="conception-intro">
+        <h1>Explication de la conception du site</h1>
+        <p>
+            Cette page explique les choix techniques et structurels que nous avons
+            faits pour réaliser ce rapport au format web, en respectant les consignes
+            de la ressource <abbr title="Ressource 1.02 - Développement d'Interface Web">R1.02</abbr>.
+        </p>
+    </section>
+
+    <section id="structure-fichiers">
+        <h2>Architecture et organisation des fichiers</h2>
+        <p>
+            L'architecture de notre site est organisée de manière logique :
+        </p>
+        <ul>
+            <li>Tous les fichiers <code>.<abbr title="HyperText Markup Language">html</abbr></code> sont à la racine.</li>
+            <li>Un dossier <code>css/</code> contient notre feuille de style unique <code>style.css</code>.</li>
+            <li>Un dossier <code>images/</code> contient toutes nos captures d'écran.</li>
+        </ul>
+        <p>
+            Cette structure est simple et facile à maintenir.
+        </p>
+    </section>
+
+    <section id="outils-langages">
+        <h2>Outils et Langages</h2>
+        <p>
+            Conformément aux consignes, ce site a été entièrement codé à la main
+            en <strong><abbr title="HyperText Markup Language 5">HTML5</abbr></strong> et <strong><abbr title="Cascading Style Sheets 3">CSS3</abbr></strong>,
+            sans utiliser de générateur <abbr title="What You See Is What You Get">WYSIWYG</abbr>.
+        </p>
+        <ul>
+            <li>
+                <strong><abbr title="HyperText Markup Language 5">HTML5</abbr> Sémantique :</strong> Nous avons utilisé les balises
+                <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>,
+                <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>,
+                <code>&lt;article&gt;</code>, et <code>&lt;footer&gt;</code> pour
+                donner du sens à la structure de nos pages.
+            </li>
+            <li>
+                <strong><abbr title="Cascading Style Sheets 3">CSS3</abbr> :</strong> L'ensemble du style est géré par une unique feuille
+                de style externe (<code>style.css</code>) pour garantir une
+                charte graphique cohérente sur tout le site.
+            </li>
+        </ul>
+    </section>
+
+    <section id="design-technique">
+        <h2>Design et éléments techniques</h2>
+        
+        <article>
+            <h3>Navigation et Ergonomie</h3>
+            <p>
+                Une barre de navigation fixe (sur ordinateur) est présente sur chaque page,
+                permettant de naviguer facilement. Un pied de page est également
+                présent et reste en bas de l'écran grâce à Flexbox.
+            </p>
+        </article>
+
+        <article>
+            <h3>Éléments requis</h3>
+            <p>
+                Au fil des pages, nous avons intégré tous les éléments <abbr title="HyperText Markup Language">HTML</abbr> requis :
+            </p>
+            <ul>
+                <li>Des <strong>images</strong> (<code>&lt;img&gt;</code>) pour nos graphiques et résultats.</li>
+                <li>Des <strong>tableaux</strong> (<code>&lt;table&gt;</code>) pour présenter des données structurées.</li>
+                <li>Des <strong>listes à puces</strong> (<code>&lt;ul&gt;</code>) pour structurer l'information.</li>
+                <li>L'alignement <strong>Flexbox</strong> (<code>display: flex</code>) a été utilisé pour centrer la navigation et gérer le layout principal (sticky footer).</li>
+            </ul>
+        </article>
+        
+        <article>
+            <h3>Design Responsive</h3>
+            <p>
+                Le site est responsive. Nous avons utilisé la balise <code>meta viewport</code> 
+                et une <strong>Media Query</strong> (<code>@media</code>). Sur les écrans de moins de 992px, 
+                le menu desktop est remplacé par un menu "burger" fonctionnel 
+                utilisant une checkbox et un label.
+            </p>
+        </article>
+    </section>
+
+    <section id="tests-validation">
+        <h2>Tests et Validation</h2>
+        <p>
+            Nous avons testé l'affichage et les fonctionnalités du site sur
+            deux navigateurs différents, dont **Firefox**, 
+            pour assurer la compatibilité.
+        </p>
+        <p>
+            De plus, nous avons utilisé le <strong>validateur <abbr title="World Wide Web Consortium">W3C</abbr></strong> pour 
+            vérifier la conformité de notre code <abbr title="HyperText Markup Language 5">HTML5</abbr> et nous 
+            assurer qu'il ne contenait pas d'erreurs, comme demandé.
+        </p>
+    </section>
+    
+</main>
+
+<footer>
+    <p><abbr title="Situation d'Apprentissage et d'Évaluation">SAE</abbr> S1.04 & <abbr title="Ressource 1.02 - Développement d'Interface Web">R1.02</abbr> - BUT Informatique - <abbr title="Institut Universitaire de Technologie">IUT</abbr> de Paris - Rives de Seine</p>
+    <p>Année 2024-2025</p>
+</footer>
+
+</body>
+</html>
