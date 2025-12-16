@@ -40,10 +40,5 @@ Conformément au cahier des charges R1.02 :
 └── img/
     └── ...          # Captures d'écran, schémas BDD, logos
 
-## 👥 Auteurs
-
-* Sittiniane Aditya
-* Votre Binôme
-
 ---
 Projet réalisé dans le cadre du BUT Informatique - IUT de Paris Rives de Seine.
