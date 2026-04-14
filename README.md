@@ -29,6 +29,7 @@ In accordance with the R1.02 specifications:
 
 ## File Structure
 
+```
 /
 ├── index.html       # Home page
 ├── mission1.html    # Mission 1 Report
@@ -39,6 +40,6 @@ In accordance with the R1.02 specifications:
 │   └── style.css    # Stylesheets
 └── img/
     └── ...          # Screenshots, DB schemas, logos
-
+```
 ---
 Project realized as part of the BUT Informatique (Bachelor of Technology in Computer Science) - IUT of Paris Rives de Seine.
