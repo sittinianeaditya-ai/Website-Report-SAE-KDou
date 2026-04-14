@@ -4,10 +4,10 @@ This repository hosts the static website serving as the official report for SAE 
 
 It presents a complete data analysis of the KDou company in the form of a web interface.
 
-## 🔗 Access to the Site
+## Access to the Site
 The site is viewable online via GitHub Pages (link to be activated in the repository settings).
 
-## 📝 Report Content
+## Report Content
 
 The site is structured according to the assignment guidelines:
 
@@ -17,7 +17,7 @@ The site is structured according to the assignment guidelines:
 * **Mission 3 (SQL Analysis)**: In-depth SQL analysis on the new version of the database (Products, Clients, Origins, etc.).
 * **Technical Overview**: A dedicated page explaining the technical realization of this website (architecture, CSS choices, challenges).
 
-## 🛠️ Technical Constraints Respected
+## Technical Constraints Respected
 
 In accordance with the R1.02 specifications:
 
@@ -27,7 +27,7 @@ In accordance with the R1.02 specifications:
 * **Structure**: Use of semantic tags, tables, lists, and images.
 * **Compatibility**: Tested and validated on Firefox.
 
-## 📂 File Structure
+## File Structure
 
 /
 ├── index.html       # Home page
